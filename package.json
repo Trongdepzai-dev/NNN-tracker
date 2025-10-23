@@ -8,7 +8,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "backend": "node server/index.js",
+    "backend": "node server/local-dev.js",
     "migrate": "node server/migrate.js"
   },
   "dependencies": {
