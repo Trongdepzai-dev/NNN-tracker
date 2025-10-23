@@ -1,0 +1,199 @@
+{
+  "appName": "No Nut November",
+  "tagline": "Good luck, {{userName}}!",
+  "adminBadge": "Admin 👑",
+  "previewMode": {
+    "notice": "You are in preview mode.",
+    "exit": "Exit"
+  },
+  "stats": {
+    "succeeded": "Succeeded",
+    "streak": "Streak"
+  },
+  "progress": {
+    "label": "Progress",
+    "days": "{{value}} / {{max}} days",
+    "remaining": "{{count}} days remaining. You can do it!",
+    "remaining_plural": "{{count}} days remaining. You can do it!"
+  },
+  "achievements": {
+    "title": "Achievements",
+    "unlockedToast": {
+      "title": "Achievement Unlocked!",
+      "description": "{{icon}} {{title}}"
+    },
+    "FIRST_WEEK": {
+      "title": "Strong Start",
+      "description": "Complete the first 7 days."
+    },
+    "STREAK_7": {
+      "title": "On Fire",
+      "description": "Achieve a 7-day streak."
+    },
+    "HALFWAY": {
+      "title": "Halfway There",
+      "description": "Complete 15 days."
+    },
+    "FINISHER": {
+      "title": "Legend",
+      "description": "Complete all 30 days."
+    }
+  },
+  "cooldown": {
+    "title": "Cooldown Active",
+    "description": "You have failed. 24 hours are needed to recover.",
+    "detailed": "You have failed. Time is needed to recover before continuing."
+  },
+  "timeUnits": {
+    "days": "Days",
+    "hours": "Hours",
+    "minutes": "Minutes",
+    "seconds": "Seconds"
+  },
+  "countdown": {
+    "title": "Time Remaining",
+    "ended": "The challenge has ended!"
+  },
+  "preChallenge": {
+    "title": "The Challenge is About to Begin!",
+    "description": "Prepare yourself. The challenge begins in:",
+    "ready": "It's time!",
+    "previewButton": "Preview Interface"
+  },
+  "footer": {
+    "madeBy": "Made with love by B.Trọng ❤️",
+    "secretToast": {
+      "title": "You found a secret!",
+      "description": "Keep up the great work!"
+    },
+    "toggleView": {
+      "dashboard": "View Leaderboard",
+      "tracker": "Back to Tracker"
+    }
+  },
+  "notifications": {
+    "title": "Daily Reminders",
+    "description": "Choose a time to receive a daily check-in notification.",
+    "blocked": "Notifications are blocked in your browser settings.",
+    "save": "Save",
+    "disable": "Disable",
+    "toast": {
+      "unsupported": "Browser does not support notifications.",
+      "success": "Saved! Notifications will be sent at {{time}}.",
+      "warning": "You need to allow notifications to set reminders.",
+      "disabled": "Notifications disabled."
+    },
+    "reminder": {
+        "title": "No Nut November Daily Reminder",
+        "body": "Don't forget to check in today!"
+    }
+  },
+  "accentPicker": {
+    "title": "Accent Color",
+    "description": "Customize the accent color for the current theme.",
+    "reset": "Reset"
+  },
+  "welcomeScreen": {
+    "title": "Join the Challenge",
+    "description": "Enroll to begin your journey to conquer No Nut November.",
+    "inputLabel": "Warrior's Name",
+    "button": "Begin"
+  },
+  "dashboard": {
+    "title": "Leaderboard",
+    "description": "See who has the strongest will!",
+    "you": "(You)",
+    "backButton": "Back",
+    "chartTitle": "Progress Chart v3.0",
+    "statsTitle": "Challenge Stats",
+    "longestStreak": "Longest Streak",
+    "successRate": "Success Rate",
+    "daysFailed": "Days Failed"
+  },
+  "chartTooltip": {
+    "day": "Day {{label}}",
+    "status": "Status: {{status}}",
+    "statusTypes": {
+      "pending": "Pending",
+      "success": "Success",
+      "fail": "Fail"
+    },
+    "cumulative": "Total Success: {{count}}"
+  },
+  "guide": {
+    "title": "Quick Guide",
+    "buttonLabel": "Open guide",
+    "closeButton": "Got it",
+    "sections": {
+      "checkIn": {
+        "title": "Daily Check-in",
+        "description": "Click a day on the calendar to mark it as successful. Past days that are not checked will automatically be marked as failed (✕)."
+      },
+      "journal": {
+        "title": "Daily Journal",
+        "description": "Click on any checked day to open your journal. Write down your thoughts and track your journey. Days with notes are marked with a dot."
+      },
+      "achievements": {
+        "title": "Unlock Achievements",
+        "description": "When you reach important milestones (e.g., completing 7 days), you will automatically unlock the corresponding achievements."
+      },
+      "settings": {
+        "title": "Reminders & Customization",
+        "description": "In the settings section below, you can set daily reminders, switch themes, and customize the accent color to personalize your experience."
+      },
+      "cooldown": {
+        "title": "Relapse Cooldown",
+        "description": "If you fail a past day, you will be locked out from checking in for 24 hours to 'recover'. Be careful!"
+      }
+    }
+  },
+  "quoteModal": {
+    "title": "Congratulations!",
+    "close": "Close"
+  },
+  "journalModal": {
+    "title": "Journal Entry - Day {{day}}",
+    "placeholder": "How are you feeling today?",
+    "save": "Save",
+    "close": "Close",
+    "savedToast": "Journal entry for Day {{day}} saved!"
+  },
+  "sharing": {
+      "title": "Share Your Progress",
+      "tweet": "I'm on a {{streak}}-day streak in the #NoNutNovember challenge! Tracking my progress with this awesome app. My will is iron!",
+      "telegram": "I'm on a {{streak}}-day streak in the No Nut November challenge! My will is iron!"
+  },
+  "matrixThemeToast": "SECRET THEME UNLOCKED: MATRIX",
+  "quotes": {
+    "q1": "Go on bro, just a few more days!",
+    "q2": "True strength is not in muscles, but in willpower.",
+    "q3": "Every successful day is a victory. You've won again today!",
+    "q4": "Don't let temporary desires destroy long-term goals.",
+    "q5": "You are doing great! Keep moving forward.",
+    "q6": "The only failure is when you give up. Don't give up!",
+    "q7": "Remember why you started. Keep going!",
+    "q8": "Today you are stronger than yesterday. Be proud!",
+    "q9": "The peak of glory is ahead. Keep going!",
+    "q10": "A moment of weakness, a month of regret. Stay strong!",
+    "q11": "Discipline is the bridge between goals and accomplishment.",
+    "q12": "The pain you feel today is the strength you feel tomorrow.",
+    "q13": "Don't count the days, make the days count.",
+    "q14": "You are stronger than your excuses.",
+    "q15": "Master your desires, and you will master your life.",
+    "q16": "Willpower is a muscle. The more you train it, the stronger it gets.",
+    "q17": "A moment of satisfaction isn't worth a month of regret.",
+    "q18": "A journey of a thousand miles begins with a single step. You've come so far.",
+    "q19": "Self-control is strength. Right thought is mastery. Calmness is power.",
+    "q20": "You are not missing out on anything. You are regaining control.",
+    "q21": "Be proud of how far you've come. Have faith in how far you can go.",
+    "q22": "Victory is reserved for those who are willing to pay its price.",
+    "q23": "Abstinence is the highest sign of self-mastery.",
+    "q24": "Resist now, to enjoy later.",
+    "q25": "Forge your will into a weapon.",
+    "q26": "Your future self will thank you for your discipline today.",
+    "q27": "The chains of habit are too light to be felt until they are too heavy to be broken. You are breaking them.",
+    "q28": "Rise above the noise. Find your own signal.",
+    "q29": "The harder the battle, the sweeter the victory.",
+    "q30": "Control your mind, or it will control you."
+  }
+}

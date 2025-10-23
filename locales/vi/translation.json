@@ -1,0 +1,199 @@
+{
+  "appName": "No Nut November",
+  "tagline": "Cố lên, {{userName}}!",
+  "adminBadge": "Admin 👑",
+  "previewMode": {
+    "notice": "Đang ở chế độ xem trước.",
+    "exit": "Thoát"
+  },
+  "stats": {
+    "succeeded": "Thành công",
+    "streak": "Chuỗi"
+  },
+  "progress": {
+    "label": "Tiến độ",
+    "days": "{{value}} / {{max}} ngày",
+    "remaining": "Còn lại {{count}} ngày nữa. Cố lên!",
+    "remaining_plural": "Còn lại {{count}} ngày nữa. Cố lên!"
+  },
+  "achievements": {
+    "title": "Thành Tựu",
+    "unlockedToast": {
+      "title": "Đã mở khóa thành tựu!",
+      "description": "{{icon}} {{title}}"
+    },
+    "FIRST_WEEK": {
+      "title": "Khởi Đầu Thuận Lợi",
+      "description": "Hoàn thành 7 ngày đầu tiên."
+    },
+    "STREAK_7": {
+      "title": "Nóng Máy",
+      "description": "Đạt chuỗi 7 ngày liên tiếp."
+    },
+    "HALFWAY": {
+      "title": "Nửa Chặng Đường",
+      "description": "Hoàn thành 15 ngày."
+    },
+    "FINISHER": {
+      "title": "Huyền Thoại",
+      "description": "Hoàn thành tất cả 30 ngày."
+    }
+  },
+  "cooldown": {
+    "title": "Cooldown Đang Hoạt Động",
+    "description": "Bạn đã thất bại. Cần 24 giờ để hồi phục.",
+    "detailed": "Bạn đã thất bại. Cần thời gian hồi phục trước khi tiếp tục."
+  },
+  "timeUnits": {
+    "days": "Ngày",
+    "hours": "Giờ",
+    "minutes": "Phút",
+    "seconds": "Giây"
+  },
+  "countdown": {
+    "title": "Thời gian còn lại",
+    "ended": "Thử thách đã kết thúc!"
+  },
+  "preChallenge": {
+    "title": "Thử thách sắp bắt đầu!",
+    "description": "Hãy chuẩn bị tinh thần. Thử thách bắt đầu sau:",
+    "ready": "Đã đến lúc!",
+    "previewButton": "Xem trước giao diện"
+  },
+  "footer": {
+    "madeBy": "Làm với cả trái tim bởi B.Trọng ❤️",
+    "secretToast": {
+      "title": "Bạn đã tìm thấy một bí mật!",
+      "description": "Hãy tiếp tục làm tốt nhé!"
+    },
+    "toggleView": {
+      "dashboard": "Xem Bảng Xếp Hạng",
+      "tracker": "Quay Lại Tracker"
+    }
+  },
+  "notifications": {
+    "title": "Lời nhắc hàng ngày",
+    "description": "Chọn thời gian để nhận thông báo điểm danh mỗi ngày.",
+    "blocked": "Thông báo đã bị chặn trong cài đặt trình duyệt của bạn.",
+    "save": "Lưu",
+    "disable": "Tắt",
+    "toast": {
+      "unsupported": "Trình duyệt không hỗ trợ thông báo.",
+      "success": "Đã lưu! Thông báo sẽ được gửi lúc {{time}}.",
+      "warning": "Bạn cần cho phép thông báo để đặt lời nhắc.",
+      "disabled": "Đã tắt thông báo."
+    },
+    "reminder": {
+        "title": "Lời nhắc hàng ngày NNN",
+        "body": "Đừng quên điểm danh ngày hôm nay nhé!"
+    }
+  },
+  "accentPicker": {
+    "title": "Màu Nhấn",
+    "description": "Tùy chỉnh màu nhấn cho giao diện hiện tại.",
+    "reset": "Đặt lại"
+  },
+  "welcomeScreen": {
+    "title": "Gia nhập Thử thách",
+    "description": "Hãy ghi danh để bắt đầu hành trình chinh phục No Nut November.",
+    "inputLabel": "Tên chiến binh",
+    "button": "Bắt đầu"
+  },
+  "dashboard": {
+    "title": "Bảng Xếp Hạng",
+    "description": "Xem ai là người có ý chí sắt đá nhất!",
+    "you": "(Bạn)",
+    "backButton": "Quay Lại",
+    "chartTitle": "Biểu đồ tiến độ v3.0",
+    "statsTitle": "Thống kê Thử thách",
+    "longestStreak": "Chuỗi dài nhất",
+    "successRate": "Tỷ lệ thành công",
+    "daysFailed": "Số ngày thất bại"
+  },
+  "chartTooltip": {
+    "day": "Ngày {{label}}",
+    "status": "Trạng thái: {{status}}",
+    "statusTypes": {
+      "pending": "Chưa đến",
+      "success": "Thành công",
+      "fail": "Thất bại"
+    },
+    "cumulative": "Tổng thành công: {{count}}"
+  },
+  "guide": {
+    "title": "Hướng dẫn nhanh",
+    "buttonLabel": "Mở hướng dẫn",
+    "closeButton": "Đã hiểu",
+    "sections": {
+      "checkIn": {
+        "title": "Điểm danh hàng ngày",
+        "description": "Nhấn vào một ngày trên lịch để đánh dấu là đã thành công. Các ngày trong quá khứ nếu không được chọn sẽ tự động bị đánh dấu là thất bại (✕)."
+      },
+      "journal": {
+        "title": "Nhật ký hàng ngày",
+        "description": "Nhấn vào bất kỳ ngày nào đã được đánh dấu để mở nhật ký. Ghi lại suy nghĩ và theo dõi hành trình của bạn. Các ngày có ghi chú sẽ được đánh dấu bằng một dấu chấm."
+      },
+      "achievements": {
+        "title": "Mở khóa Thành tựu",
+        "description": "Khi bạn đạt được các cột mốc quan trọng (ví dụ: hoàn thành 7 ngày), bạn sẽ tự động mở khóa các thành tựu tương ứng."
+      },
+      "settings": {
+        "title": "Lời nhắc & Tùy chỉnh",
+        "description": "Trong phần cài đặt bên dưới, bạn có thể đặt lời nhắc hàng ngày, thay đổi giao diện và tùy chỉnh màu nhấn để cá nhân hóa trải nghiệm."
+      },
+      "cooldown": {
+        "title": "Thời gian hồi chiêu",
+        "description": "Nếu bạn thất bại một ngày trong quá khứ, bạn sẽ bị khóa điểm danh trong 24 giờ để 'hồi phục'. Hãy cẩn thận!"
+      }
+    }
+  },
+  "quoteModal": {
+    "title": "Chúc mừng!",
+    "close": "Đóng"
+  },
+  "journalModal": {
+    "title": "Nhật ký - Ngày {{day}}",
+    "placeholder": "Hôm nay bạn cảm thấy thế nào?",
+    "save": "Lưu",
+    "close": "Đóng",
+    "savedToast": "Đã lưu nhật ký cho Ngày {{day}}!"
+  },
+  "sharing": {
+      "title": "Chia sẻ Tiến độ",
+      "tweet": "Tôi đang có chuỗi {{streak}} ngày trong thử thách #NoNutNovember! Theo dõi tiến trình của tôi bằng ứng dụng tuyệt vời này. Ý chí của tôi là sắt đá!",
+      "telegram": "Tôi đang có chuỗi {{streak}} ngày trong thử thách No Nut November! Ý chí của tôi là sắt đá!"
+  },
+  "matrixThemeToast": "ĐÃ MỞ KHÓA GIAO DIỆN BÍ MẬT: MATRIX",
+  "quotes": {
+    "q1": "Cố lên bro, chỉ còn vài ngày nữa thôi!",
+    "q2": "Sức mạnh thật sự không nằm ở cơ bắp, mà nằm ở ý chí.",
+    "q3": "Mỗi ngày thành công là một chiến thắng. Hôm nay bạn lại thắng rồi!",
+    "q4": "Đừng để những ham muốn nhất thời phá hủy mục tiêu dài hạn.",
+    "q5": "Bạn đang làm rất tốt! Hãy tiếp tục tiến lên.",
+    "q6": "Thất bại duy nhất là khi bạn từ bỏ. Đừng từ bỏ!",
+    "q7": "Hãy nhớ lý do bạn bắt đầu. Cố lên!",
+    "q8": "Hôm nay bạn đã mạnh hơn hôm qua. Tự hào lên!",
+    "q9": "Đỉnh vinh quang đang ở phía trước. Keep going!",
+    "q10": "Một phút yếu lòng, cả tháng ăn năn. Stay strong!",
+    "q11": "Discipline is the bridge between goals and accomplishment.",
+    "q12": "The pain you feel today is the strength you feel tomorrow.",
+    "q13": "Đừng đếm ngày, hãy làm cho mỗi ngày đều đáng giá.",
+    "q14": "You are stronger than your excuses.",
+    "q15": "Làm chủ được ham muốn, bạn sẽ làm chủ được cuộc đời.",
+    "q16": "Ý chí là một cơ bắp. Càng rèn luyện, nó càng mạnh mẽ.",
+    "q17": "Một khoảnh khắc thỏa mãn không đáng để đánh đổi cả tháng hối tiếc.",
+    "q18": "Hành trình vạn dặm bắt đầu bằng một bước chân. Bạn đã đi rất xa rồi.",
+    "q19": "Tự chủ là sức mạnh. Tư duy đúng đắn là bậc thầy. Bình tĩnh là quyền năng.",
+    "q20": "Bạn không bỏ lỡ điều gì cả. Bạn đang giành lại quyền kiểm soát.",
+    "q21": "Hãy tự hào về chặng đường đã qua. Tin tưởng vào nơi bạn có thể đến.",
+    "q22": "Chiến thắng chỉ dành cho những người sẵn sàng trả giá.",
+    "q23": "Kiêng khem là dấu hiệu cao nhất của sự tự chủ.",
+    "q24": "Hãy kháng cự bây giờ, để tận hưởng sau này.",
+    "q25": "Rèn luyện ý chí của bạn thành một vũ khí.",
+    "q26": "Con người tương lai sẽ cảm ơn sự kỷ luật của bạn hôm nay.",
+    "q27": "Những xiềng xích của thói quen quá nhẹ để cảm nhận cho đến khi chúng quá nặng để phá vỡ. Bạn đang phá vỡ chúng.",
+    "q28": "Vượt lên trên sự ồn ào. Tìm thấy tín hiệu của riêng bạn.",
+    "q29": "Trận chiến càng khó khăn, chiến thắng càng ngọt ngào.",
+    "q30": "Kiểm soát tâm trí của bạn, nếu không nó sẽ kiểm soát bạn."
+  }
+}
