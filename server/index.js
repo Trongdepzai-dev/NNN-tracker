@@ -198,9 +198,11 @@ app.get('/api/share/:shareId', (req, res) => {
   }
 });
 
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Backend server running on http://0.0.0.0:${PORT}`);
-  console.log(`📊 Database: ${path.join(__dirname, 'nnn-tracker.db')}`);
-});
+if (!process.env.NETLIFY) {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Backend server running on http://0.0.0.0:${PORT}`);
+    console.log(`📊 Database: ${path.join(__dirname, 'nnn-tracker.db')}`);
+  });
+}
 
 export default app;
