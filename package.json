@@ -4,25 +4,33 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "start": "concurrently \"npm:dev\" \"npm:backend\"",
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "backend": "node server/index.js"
   },
   "dependencies": {
-    "react-dom": "18.3.1",
-    "react": "18.3.1",
+    "better-sqlite3": "^12.4.1",
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
     "framer-motion": "11.2.12",
-    "lucide-react": "0.395.0",
-    "sonner": "1.5.0",
-    "recharts": "2.12.7",
-    "react-is": "18.3.1",
     "i18next": "23.11.5",
+    "i18next-browser-languagedetector": "8.0.0",
+    "lucide-react": "0.395.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
     "react-i18next": "14.1.2",
-    "i18next-browser-languagedetector": "8.0.0"
+    "react-is": "18.3.1",
+    "recharts": "2.12.7",
+    "sonner": "1.5.0"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
     "@vitejs/plugin-react": "^5.0.0",
+    "concurrently": "^9.2.1",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"
   }

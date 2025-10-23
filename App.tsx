@@ -8,6 +8,7 @@ import useLocalStorage from './hooks/useLocalStorage';
 import useKonamiCode from './hooks/useKonamiCode';
 import { useTheme } from './context/ThemeContext';
 import { themes } from './themes';
+import { api } from './api/client';
 import CalendarGrid from './components/CalendarGrid';
 import QuoteModal from './components/QuoteModal';
 import ProgressBar from './components/ProgressBar';
@@ -34,11 +35,14 @@ declare const VANTA: any;
 const App: React.FC = () => {
   const { t } = useTranslation();
   const [userName, setUserName] = useLocalStorage<string | null>('nnn-user-name-2024', null);
+  const [userId, setUserId] = useLocalStorage<number | null>('nnn-user-id-2024', null);
   const [checkedDays, setCheckedDays] = useLocalStorage<CheckedDays>('nnn-tracker-days-2024', {});
   const [journalEntries, setJournalEntries] = useLocalStorage<JournalEntries>('nnn-journal-entries-2024', {});
   const [unlockedAchievements, setUnlockedAchievements] = useLocalStorage<AchievementId[]>('nnn-achievements-2024', []);
   const [relapseCooldownEnd, setRelapseCooldownEnd] = useLocalStorage<number | null>('nnn-cooldown-2024', null);
   const [isCooldownActive, setIsCooldownActive] = useState(false);
+  const [isLoadingUser, setIsLoadingUser] = useState(false);
+  const [isHydratingData, setIsHydratingData] = useState(true);
   const [showQuoteModal, setShowQuoteModal] = useState(false);
   const [currentQuote, setCurrentQuote] = useState<string | null>(null);
   const [newlyUnlocked, setNewlyUnlocked] = useState<AchievementId | null>(null);
@@ -198,7 +202,7 @@ const App: React.FC = () => {
 
   const daysRemaining = isNovember ? 30 - todayInNovember : 30;
 
-  const handleDayClick = (day: number) => {
+  const handleDayClick = async (day: number) => {
     const wasChecked = checkedDays[day] || false;
     const newCheckedDays = { ...checkedDays, [day]: !wasChecked };
     
@@ -213,6 +217,14 @@ const App: React.FC = () => {
 
     setCheckedDays(newCheckedDays);
 
+    if (userId) {
+      try {
+        await api.saveProgress(userId, day, !wasChecked, journalEntries[day]);
+      } catch (error) {
+        console.error('Failed to sync progress:', error);
+      }
+    }
+
     if (!wasChecked) {
       const randomIndex = Math.floor(Math.random() * MOTIVATIONAL_QUOTES.length);
       setCurrentQuote(t(MOTIVATIONAL_QUOTES[randomIndex]));
@@ -225,9 +237,17 @@ const App: React.FC = () => {
     setIsJournalModalOpen(true);
   };
 
-  const handleSaveJournal = (text: string) => {
+  const handleSaveJournal = async (text: string) => {
     if (selectedJournalDay) {
       setJournalEntries(prev => ({ ...prev, [selectedJournalDay]: text }));
+      
+      if (userId) {
+        try {
+          await api.saveProgress(userId, selectedJournalDay, checkedDays[selectedJournalDay] || false, text);
+        } catch (error) {
+          console.error('Failed to sync journal:', error);
+        }
+      }
     }
   };
 
@@ -270,11 +290,92 @@ const App: React.FC = () => {
     checkAchievements();
   }, [daysSucceeded, currentStreak, checkAchievements]);
 
-  const handleNameSubmit = (name: string) => {
-    setUserName(name);
+  useEffect(() => {
+    const loadUserProgress = async () => {
+      if (userId) {
+        setIsHydratingData(true);
+        try {
+          const serverProgress = await api.getUserProgress(userId);
+          setCheckedDays(serverProgress.checkedDays);
+          setJournalEntries(serverProgress.journalEntries);
+        } catch (error) {
+          console.error('Failed to load user progress from server:', error);
+        } finally {
+          setIsHydratingData(false);
+        }
+      } else {
+        setIsHydratingData(false);
+      }
+    };
+
+      loadUserProgress();
+    }, [userId]);  
+  useEffect(() => {
+    const ensureUserRegistration = async () => {
+      if (userName && !userId) {
+        setIsLoadingUser(true);
+        try {
+          const response = await api.registerUser(userName);
+          setUserId(response.userId);
+          
+          if (response.existing) {
+            const serverProgress = await api.getUserProgress(response.userId);
+            setCheckedDays(serverProgress.checkedDays);
+            setJournalEntries(serverProgress.journalEntries);
+          }
+        } catch (error) {
+          console.error('Failed to register existing user:', error);
+          setUserName(null);
+        } finally {
+          setIsLoadingUser(false);
+        }
+      }
+    };
+
+      ensureUserRegistration();
+    }, [userName, userId]);
+  const handleNameSubmit = async (name: string) => {
+    setIsLoadingUser(true);
+    
+    try {
+      const response = await api.registerUser(name);
+      setUserId(response.userId);
+      setUserName(name);
+      
+      if (response.existing) {
+        const serverProgress = await api.getUserProgress(response.userId);
+        setCheckedDays(serverProgress.checkedDays);
+        setJournalEntries(serverProgress.journalEntries);
+        const hasData = Object.keys(serverProgress.checkedDays).length > 0 || Object.keys(serverProgress.journalEntries).length > 0;
+        if (hasData) {
+          toast.success(t('welcome.dataLoaded', 'Đã tải dữ liệu từ server!'));
+        }
+      } else {
+        toast.success(t('welcome.registered', 'Đã đăng ký thành công!'));
+      }
+    } catch (error) {
+      console.error('Failed to register user:', error);
+      toast.error(t('welcome.error', 'Không thể kết nối với server'));
+    } finally {
+      setIsLoadingUser(false);
+    }
   };
 
-  if (!userName) {
+  if (!userName || !userId || isLoadingUser || isHydratingData) {
+    if (isLoadingUser || isHydratingData) {
+      return (
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <div className="text-2xl font-bold text-[var(--color-text-primary)] mb-2">
+              {t('loading.title', 'Đang tải...')}
+            </div>
+            <div className="text-[var(--color-text-secondary)]">
+              {isHydratingData ? t('loading.syncData', 'Đang đồng bộ dữ liệu...') : t('loading.message', 'Vui lòng đợi')}
+            </div>
+          </div>
+        </div>
+      );
+    }
     return <WelcomeScreen onNameSubmit={handleNameSubmit} />;
   }
   
@@ -375,6 +476,7 @@ const App: React.FC = () => {
                 currentUser={{ name: userName, streak: currentStreak }}
                 checkedDays={checkedDays}
                 todayInNovember={todayInNovember}
+                userId={userId || undefined}
                 onBack={() => setView('tracker')}
               />
             </motion.div>

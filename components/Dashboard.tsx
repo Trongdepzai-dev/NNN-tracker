@@ -1,35 +1,55 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo, useCallback, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Flame } from 'lucide-react';
 import ProgressChart from './ProgressChart';
 import StatsPanel from './StatsPanel';
 import ShareSection from './ShareSection';
+import { api } from '../api/client';
 import type { LeaderboardEntry, CheckedDays } from '../types';
 
 interface DashboardProps {
   currentUser: LeaderboardEntry;
   checkedDays: CheckedDays;
   todayInNovember: number;
+  userId?: number;
   onBack: () => void;
 }
 
-const exampleLeaderboard: LeaderboardEntry[] = [
-  { name: 'Chiến Binh Dũng Cảm', streak: 28 },
-  { name: 'Mastermind', streak: 25 },
-  { name: 'Iron Will', streak: 22 },
-  { name: 'Kẻ Bất Bại', streak: 19 },
-  { name: 'Thợ Rèn Ý Chí', streak: 15 },
-  { name: 'Người Mới', streak: 8 },
-  { name: 'Chí Lớn', streak: 5 },
-];
-
-
-const Dashboard: React.FC<DashboardProps> = ({ currentUser, checkedDays, todayInNovember, onBack }) => {
+const Dashboard: React.FC<DashboardProps> = ({ currentUser, checkedDays, todayInNovember, userId, onBack }) => {
   const { t } = useTranslation();
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchLeaderboard = async () => {
+      try {
+        const data = await api.getLeaderboard();
+        setLeaderboard(data);
+      } catch (error) {
+        console.error('Failed to fetch leaderboard:', error);
+        setLeaderboard([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchLeaderboard();
+    const interval = setInterval(fetchLeaderboard, 30000);
+    return () => clearInterval(interval);
+  }, []);
   
-  const fullLeaderboard = [...exampleLeaderboard, currentUser]
-    .sort((a, b) => b.streak - a.streak);
+  const fullLeaderboard = useMemo(() => {
+    const userInLeaderboard = leaderboard.some(
+      entry => entry.name === currentUser.name && entry.streak === currentUser.streak
+    );
+    
+    if (userInLeaderboard) {
+      return leaderboard;
+    }
+    
+    return [...leaderboard, currentUser].sort((a, b) => b.streak - a.streak);
+  }, [leaderboard, currentUser]);
   
   const calculateLongestStreak = useCallback(() => {
     let longest = 0;
@@ -86,9 +106,18 @@ const Dashboard: React.FC<DashboardProps> = ({ currentUser, checkedDays, todayIn
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0, transition: { delay: 0.3 } }}
       >
-        {fullLeaderboard.map((entry, index) => {
+        {isLoading ? (
+          <div className="text-center py-8 text-[var(--color-text-secondary)]">
+            {t('dashboard.loading', 'Đang tải bảng xếp hạng...')}
+          </div>
+        ) : fullLeaderboard.length === 0 ? (
+          <div className="text-center py-8 text-[var(--color-text-secondary)]">
+            {t('dashboard.noData', 'Chưa có dữ liệu bảng xếp hạng')}
+          </div>
+        ) : (
+          fullLeaderboard.map((entry, index) => {
             const rank = index + 1;
-            const isCurrentUser = entry.name === currentUser.name && entry.streak === currentUser.streak;
+            const isCurrentUser = entry.name === currentUser.name;
             const isDeveloper = entry.name === 'B.Trọng';
 
             let rankDisplay: React.ReactNode;
@@ -124,11 +153,17 @@ const Dashboard: React.FC<DashboardProps> = ({ currentUser, checkedDays, todayIn
                     </div>
                 </div>
             )
-        })}
+          })
+        )}
       </motion.div>
 
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0, transition: { delay: 0.4 } }}>
-        <ShareSection streak={currentUser.streak} />
+        <ShareSection 
+          streak={currentUser.streak} 
+          userName={currentUser.name}
+          userId={userId}
+          daysSucceeded={Object.values(checkedDays).filter(Boolean).length}
+        />
       </motion.div>
       
       <div className="text-center mt-8">
