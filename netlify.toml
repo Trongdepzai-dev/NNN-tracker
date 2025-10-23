@@ -3,6 +3,9 @@
   publish = "dist"
   functions = "netlify/functions"
 
+[functions]
+  environment = { NETLIFY = "true" }
+
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/api/:splat"
