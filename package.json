@@ -8,10 +8,10 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "backend": "node server/index.js"
+    "backend": "node server/index.js",
+    "migrate": "node server/migrate.js"
   },
   "dependencies": {
-    "better-sqlite3": "^12.4.1",
     "body-parser": "^2.2.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
@@ -20,6 +20,7 @@
     "i18next": "23.11.5",
     "i18next-browser-languagedetector": "8.0.0",
     "lucide-react": "0.395.0",
+    "pg": "^8.16.3",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-i18next": "14.1.2",
