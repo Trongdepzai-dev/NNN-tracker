@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import db from './db.js';
+import pool from './db.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -18,7 +18,7 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Backend is running' });
 });
 
-app.post('/api/users/register', (req, res) => {
+app.post('/api/users/register', async (req, res) => {
   const { name } = req.body;
   
   if (!name || name.trim() === '') {
@@ -26,7 +26,8 @@ app.post('/api/users/register', (req, res) => {
   }
 
   try {
-    const existingUser = db.prepare('SELECT * FROM users WHERE name = ?').get(name);
+    const existingUserResult = await pool.query('SELECT id, name FROM users WHERE name = $1', [name]);
+    const existingUser = existingUserResult.rows[0];
     
     if (existingUser) {
       return res.json({ 
@@ -36,11 +37,12 @@ app.post('/api/users/register', (req, res) => {
       });
     }
 
-    const result = db.prepare('INSERT INTO users (name) VALUES (?)').run(name);
+    const insertResult = await pool.query('INSERT INTO users (name) VALUES ($1) RETURNING id, name', [name]);
+    const newUser = insertResult.rows[0];
     
     res.json({ 
-      userId: result.lastInsertRowid, 
-      name,
+      userId: newUser.id, 
+      name: newUser.name,
       existing: false 
     });
   } catch (error) {
@@ -49,7 +51,7 @@ app.post('/api/users/register', (req, res) => {
   }
 });
 
-app.post('/api/users/progress', (req, res) => {
+app.post('/api/users/progress', async (req, res) => {
   const { userId, day, checked, journalEntry } = req.body;
 
   if (!userId || !day) {
@@ -57,17 +59,15 @@ app.post('/api/users/progress', (req, res) => {
   }
 
   try {
-    const stmt = db.prepare(`
+    await pool.query(`
       INSERT INTO user_progress (user_id, day, checked, journal_entry, updated_at)
-      VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
+      VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP)
       ON CONFLICT(user_id, day) 
       DO UPDATE SET 
-        checked = excluded.checked,
-        journal_entry = excluded.journal_entry,
+        checked = EXCLUDED.checked,
+        journal_entry = EXCLUDED.journal_entry,
         updated_at = CURRENT_TIMESTAMP
-    `);
-
-    stmt.run(userId, day, checked ? 1 : 0, journalEntry || null);
+    `, [userId, day, checked, journalEntry || null]);
     
     res.json({ success: true });
   } catch (error) {
@@ -76,22 +76,23 @@ app.post('/api/users/progress', (req, res) => {
   }
 });
 
-app.get('/api/users/:userId/progress', (req, res) => {
+app.get('/api/users/:userId/progress', async (req, res) => {
   const { userId } = req.params;
 
   try {
-    const progress = db.prepare(`
+    const progressResult = await pool.query(`
       SELECT day, checked, journal_entry 
       FROM user_progress 
-      WHERE user_id = ? AND checked = 1
+      WHERE user_id = $1 AND checked = TRUE
       ORDER BY day
-    `).all(userId);
+    `, [userId]);
+    const progress = progressResult.rows;
 
     const checkedDays = {};
     const journalEntries = {};
 
     progress.forEach(p => {
-      checkedDays[p.day] = p.checked === 1;
+      checkedDays[p.day] = p.checked; // checked is already boolean
       if (p.journal_entry) {
         journalEntries[p.day] = p.journal_entry;
       }
@@ -104,16 +105,16 @@ app.get('/api/users/:userId/progress', (req, res) => {
   }
 });
 
-app.get('/api/leaderboard', (req, res) => {
+app.get('/api/leaderboard', async (req, res) => {
   try {
-    const leaderboard = db.prepare(`
+    const leaderboardResult = await pool.query(`
       WITH user_stats AS (
         SELECT 
           u.id,
           u.name,
-          COUNT(CASE WHEN up.checked = 1 THEN 1 END) as total_days,
+          COUNT(CASE WHEN up.checked = TRUE THEN 1 END) as total_days,
           (
-            SELECT MAX(streak_count)
+            SELECT COALESCE(MAX(streak_count), 0)
             FROM (
               SELECT 
                 COUNT(*) as streak_count
@@ -122,10 +123,10 @@ app.get('/api/leaderboard', (req, res) => {
                   day,
                   day - ROW_NUMBER() OVER (ORDER BY day) as grp
                 FROM user_progress
-                WHERE user_id = u.id AND checked = 1
-              )
+                WHERE user_id = u.id AND checked = TRUE
+              ) AS sub_grp
               GROUP BY grp
-            )
+            ) AS streak_counts
           ) as current_streak
         FROM users u
         LEFT JOIN user_progress up ON u.id = up.user_id
@@ -138,7 +139,8 @@ app.get('/api/leaderboard', (req, res) => {
       WHERE current_streak > 0
       ORDER BY current_streak DESC, name ASC
       LIMIT 50
-    `).all();
+    `);
+    const leaderboard = leaderboardResult.rows;
 
     res.json(leaderboard);
   } catch (error) {
@@ -147,7 +149,7 @@ app.get('/api/leaderboard', (req, res) => {
   }
 });
 
-app.post('/api/share', (req, res) => {
+app.post('/api/share', async (req, res) => {
   const { userId, userName, streak, daysSucceeded, shareData } = req.body;
 
   if (!userId || !userName) {
@@ -155,12 +157,12 @@ app.post('/api/share', (req, res) => {
   }
 
   try {
-    const shareId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const shareId = `${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
     
-    db.prepare(`
+    await pool.query(`
       INSERT INTO shared_progress (id, user_id, user_name, streak, days_succeeded, share_data)
-      VALUES (?, ?, ?, ?, ?, ?)
-    `).run(shareId, userId, userName, streak || 0, daysSucceeded || 0, JSON.stringify(shareData || {}));
+      VALUES ($1, $2, $3, $4, $5, $6)
+    `, [shareId, userId, userName, streak || 0, daysSucceeded || 0, shareData || null]);
 
     const shareUrl = `${req.protocol}://${req.get('host')}/share/${shareId}`;
     
@@ -171,15 +173,16 @@ app.post('/api/share', (req, res) => {
   }
 });
 
-app.get('/api/share/:shareId', (req, res) => {
+app.get('/api/share/:shareId', async (req, res) => {
   const { shareId } = req.params;
 
   try {
-    const share = db.prepare(`
+    const shareResult = await pool.query(`
       SELECT user_name, streak, days_succeeded, share_data, created_at
       FROM shared_progress
-      WHERE id = ?
-    `).get(shareId);
+      WHERE id = $1
+    `, [shareId]);
+    const share = shareResult.rows[0];
 
     if (!share) {
       return res.status(404).json({ error: 'Share not found' });
@@ -189,7 +192,7 @@ app.get('/api/share/:shareId', (req, res) => {
       userName: share.user_name,
       streak: share.streak,
       daysSucceeded: share.days_succeeded,
-      shareData: share.share_data ? JSON.parse(share.share_data) : {},
+      shareData: share.share_data || {},
       createdAt: share.created_at
     });
   } catch (error) {
@@ -201,7 +204,7 @@ app.get('/api/share/:shareId', (req, res) => {
 if (!process.env.NETLIFY) {
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 Backend server running on http://0.0.0.0:${PORT}`);
-    console.log(`📊 Database: ${path.join(__dirname, 'nnn-tracker.db')}`);
+    console.log(`📊 Database: PostgreSQL (Neon)`);
   });
 }
 
